@@ -1,0 +1,338 @@
+@model FirstMVCProject.ViewModels.BookViewModels.CreateBookViewModel
+
+@{
+    ViewData["Title"] = "Add New Book";
+}
+
+<style>
+    .create-page {
+        max-width: 1000px;
+        margin: 0 auto;
+        padding: 2.5rem 1rem 3rem;
+    }
+
+    .create-header {
+        margin-bottom: 2rem;
+    }
+
+        .create-header h1 {
+            color: #212529;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: .5rem;
+        }
+
+        .create-header p {
+            color: #6c757d;
+            margin-bottom: 0;
+        }
+
+    .create-card {
+        display: grid;
+        grid-template-columns: 300px minmax(0, 1fr);
+        background: #fff;
+        border: 1px solid #e9ecef;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, .06);
+    }
+
+    .create-cover {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 1.25rem;
+        padding: 2rem;
+        text-align: center;
+        background: linear-gradient(145deg, #e8f0ff, #f2eaff);
+        color: #495fc4;
+    }
+
+        .create-cover svg {
+            width: 100px;
+            height: 100px;
+        }
+
+        .create-cover h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #303f8f;
+            margin: 0;
+        }
+
+        .create-cover p {
+            color: #606ca0;
+            font-size: .95rem;
+            margin: 0;
+            line-height: 1.6;
+        }
+
+    .create-form-container {
+        min-width: 0;
+        padding: 2.25rem;
+    }
+
+    .form-heading {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: #212529;
+        margin-bottom: .5rem;
+    }
+
+    .form-description {
+        color: #6c757d;
+        font-size: .9rem;
+        margin-bottom: 1.75rem;
+    }
+
+    .create-form .form-label {
+        color: #343a40;
+        font-size: .9rem;
+        font-weight: 600;
+        margin-bottom: .5rem;
+    }
+
+    .create-form .form-control,
+    .create-form .form-select {
+        min-height: 46px;
+        border-color: #dee2e6;
+        border-radius: .6rem;
+        padding: .65rem .85rem;
+        background-color: #fff;
+        transition: border-color .2s ease, box-shadow .2s ease;
+    }
+
+        .create-form .form-control:focus,
+        .create-form .form-select:focus {
+            border-color: #86b7fe;
+            box-shadow: 0 0 0 .2rem rgba(13, 110, 253, .12);
+        }
+
+        /* Native browser validation styling */
+        .create-form .form-control:invalid:not(:placeholder-shown),
+        .create-form .form-select:invalid {
+            border-color: #dc3545;
+        }
+
+        .create-form .form-control:valid,
+        .create-form .form-select:valid {
+            border-color: #198754;
+        }
+
+    .form-field {
+        margin-bottom: 1.35rem;
+    }
+
+    .create-actions {
+        display: flex;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: .75rem;
+        margin-top: 2rem;
+        padding-top: 1.5rem;
+        border-top: 1px solid #f1f3f5;
+    }
+
+        .create-actions .btn {
+            padding: .7rem 1.25rem;
+            border-radius: .6rem;
+            font-weight: 600;
+        }
+
+    .back-link {
+        display: inline-flex;
+        align-items: center;
+        gap: .4rem;
+        margin-top: 1.5rem;
+        color: #6c757d;
+        text-decoration: none;
+        font-size: .95rem;
+    }
+
+        .back-link:hover {
+            color: #0d6efd;
+        }
+
+    @@media (max-width: 700px) {
+        .create-page {
+            padding-top: 1.5rem;
+        }
+
+        .create-header h1 {
+            font-size: 1.7rem;
+        }
+
+        .create-card {
+            grid-template-columns: 1fr;
+        }
+
+        .create-cover {
+            padding: 1.75rem 1rem;
+            gap: .75rem;
+        }
+
+            .create-cover svg {
+                width: 65px;
+                height: 65px;
+            }
+
+            .create-cover h2 {
+                font-size: 1.25rem;
+            }
+
+        .create-form-container {
+            padding: 1.5rem;
+        }
+
+        .create-actions {
+            flex-direction: column;
+            align-items: stretch;
+        }
+
+            .create-actions .btn {
+                width: 100%;
+            }
+    }
+</style>
+
+<div class="create-page">
+
+    <div class="create-header">
+        <h1>Add a New Book</h1>
+        <p>Add a book to your library by completing the information below.</p>
+    </div>
+
+    <div class="create-card">
+
+        <div class="create-cover">
+
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.2"
+                 stroke-linecap="round"
+                 stroke-linejoin="round"
+                 aria-hidden="true">
+                <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" />
+                <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2Z" />
+                <path d="M8 7h8" />
+                <path d="M8 11h8" />
+                <path d="M8 14h5" />
+            </svg>
+
+            <h2>Grow Your Library</h2>
+
+            <p>
+                Every book has a story.
+                Add a new one to your collection.
+            </p>
+
+        </div>
+
+        <div class="create-form-container">
+
+            <h2 class="form-heading">Book Information</h2>
+
+            <p class="form-description">
+                Enter the book details and select its genre.
+            </p>
+
+            <form asp-controller="Books"
+                  asp-action="Create"
+                  method="post"
+                  class="create-form" enctype="multipart/form-data">
+
+                @Html.AntiForgeryToken()
+
+                <div class="form-field">
+                    <label asp-for="BookName" class="form-label">
+                        Book Name
+                    </label>
+
+                    <input asp-for="BookName"
+                           class="form-control"
+                           placeholder="Enter the book title"
+                           required
+                           minlength="5"
+                           maxlength="100" />
+
+                    <span asp-validation-for="BookName"
+                          class="text-danger small"></span>
+                </div>
+
+                <div class="form-field">
+                    <label asp-for="Author" class="form-label">
+                        Author
+                    </label>
+
+                    <input asp-for="Author"
+                           class="form-control"
+                           placeholder="Enter the author's name"
+                           required
+                           minlength="5"
+                           maxlength="50" />
+
+                    <span asp-validation-for="Author"
+                          class="text-danger small"></span>
+                </div>
+
+                <div class="form-field">
+                    <label asp-for="Genre" class="form-label">
+                        Genre
+                    </label>
+
+                    <select asp-for="Genre"
+                            asp-items="Html.GetEnumSelectList<FirstMVCProject.Models.Genres>()"
+                            class="form-select"
+                            required>
+                        <option value="">-- Select a genre --</option>
+                    </select>
+
+                    <span asp-validation-for="Genre"
+                          class="text-danger small"></span>
+                </div>
+
+                <div class="form-field">
+                    <label asp-for="ImageFile" class="form-label">
+                        Book Image
+                    </label>
+
+                    <input asp-for="ImageFile"
+                           type="file"
+                           class="form-control"
+                           placeholder="Select a book image"
+                           required
+                           accept=".jpg,.jpeg,.png,.gif"
+                           size="5" />
+
+                    <span asp-validation-for="ImageFile"
+                          class="text-danger small"></span>
+                </div>
+
+                <div class="create-actions">
+                    <button type="submit" class="btn btn-primary">
+                        Create Book
+                    </button>
+
+                    <a asp-controller="Books"
+                       asp-action="Index"
+                       class="btn btn-outline-secondary">
+                        Cancel
+                    </a>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+    <a asp-controller="Books"
+       asp-action="Index"
+       class="back-link">
+        &larr; Back to Books Library
+    </a>
+
+</div>

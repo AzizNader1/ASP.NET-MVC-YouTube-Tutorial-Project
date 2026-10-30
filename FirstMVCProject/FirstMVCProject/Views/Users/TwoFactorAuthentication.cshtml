@@ -1,0 +1,373 @@
+@model FirstMVCProject.ViewModels.UserViewModels.TwoFactorAuthenticationViewModel
+
+@{
+    ViewData["Title"] = "Two-Factor Authentication (2FA)";
+}
+
+<style>
+    .tfa-page {
+        min-height: calc(100vh - 80px);
+        padding: 40px 16px;
+        background: #f5f7fc;
+    }
+
+    .tfa-container {
+        max-width: 820px;
+        margin: 0 auto;
+    }
+
+    .tfa-header {
+        margin-bottom: 28px;
+    }
+
+        .tfa-header h1 {
+            margin-bottom: 8px;
+            color: #202943;
+            font-size: 30px;
+            font-weight: 800;
+        }
+
+        .tfa-header p {
+            margin: 0;
+            color: #7b849b;
+            font-size: 15px;
+        }
+
+    .tfa-card {
+        overflow: hidden;
+        background: #fff;
+        border: 1px solid #edf0f7;
+        border-radius: 20px;
+        box-shadow: 0 12px 35px rgba(31, 41, 75, 0.07);
+        margin-bottom: 24px;
+    }
+
+    .tfa-card-header {
+        padding: 24px 30px;
+        background: linear-gradient(135deg, #f1f0ff, #f5f8ff);
+        border-bottom: 1px solid #edf0f7;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+    }
+
+        .tfa-card-header h2 {
+            margin: 0 0 6px;
+            color: #252e49;
+            font-size: 20px;
+            font-weight: 750;
+        }
+
+        .tfa-card-header p {
+            margin: 0;
+            color: #7b849b;
+            font-size: 14px;
+        }
+
+    .tfa-card-body {
+        padding: 30px;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 700;
+    }
+
+    .badge-active {
+        background: #e6f4ea;
+        color: #137333;
+    }
+
+    .badge-inactive {
+        background: #fef7e0;
+        color: #b06000;
+    }
+
+    .feature-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 18px;
+        margin: 24px 0;
+    }
+
+    .feature-item {
+        padding: 18px;
+        border-radius: 14px;
+        background: #fafaff;
+        border: 1px solid #ebeeff;
+    }
+
+    .feature-item-icon {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+
+    .feature-item h3 {
+        font-size: 15px;
+        font-weight: 700;
+        color: #292f45;
+        margin: 0 0 6px;
+    }
+
+    .feature-item p {
+        font-size: 13px;
+        color: #7a8298;
+        margin: 0;
+        line-height: 1.5;
+    }
+
+    .btn-action-primary {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border-radius: 12px;
+        color: #fff;
+        background: linear-gradient(135deg, #4965cf, #7354bd);
+        font-size: 15px;
+        font-weight: 650;
+        text-decoration: none;
+        border: none;
+        cursor: pointer;
+        box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25);
+        transition: all .2s;
+    }
+
+    .btn-action-primary:hover {
+        color: #fff;
+        opacity: 0.95;
+        box-shadow: 0 6px 18px rgba(99, 102, 241, 0.35);
+    }
+
+    .btn-action-danger {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        border-radius: 10px;
+        color: #dc2626;
+        background: #fef2f2;
+        border: 1px solid #fee2e2;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all .2s;
+    }
+
+    .btn-action-danger:hover {
+        background: #fee2e2;
+        color: #b91c1c;
+    }
+
+    .btn-action-secondary {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        border-radius: 10px;
+        color: #4b5563;
+        background: #f3f4f6;
+        border: 1px solid #e5e7eb;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+        cursor: pointer;
+        transition: all .2s;
+    }
+
+    .btn-action-secondary:hover {
+        background: #e5e7eb;
+        color: #1f2937;
+    }
+
+    .actions-grid {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 1px solid #edf0f7;
+    }
+
+    .alert-box {
+        padding: 16px 20px;
+        border-radius: 12px;
+        margin-bottom: 20px;
+        font-size: 14px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .alert-warning-custom {
+        background: #fffbeb;
+        border: 1px solid #fef3c7;
+        color: #92400e;
+    }
+
+    .alert-info-custom {
+        background: #eff6ff;
+        border: 1px solid #dbeafe;
+        color: #1e40af;
+    }
+</style>
+
+<div class="tfa-page">
+    <div class="tfa-container">
+
+        <div class="tfa-header">
+            <h1>Two-Factor Authentication (2FA)</h1>
+            <p>Add an extra layer of protection to your account with a mobile authenticator app.</p>
+        </div>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert" style="border-radius: 12px; margin-bottom: 24px;">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        @if (TempData["ErrorMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert" style="border-radius: 12px; margin-bottom: 24px;">
+                @TempData["ErrorMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <div class="tfa-card">
+
+            <div class="tfa-card-header">
+                <div>
+                    <h2>Authentication Status</h2>
+                    <p>Current two-factor status for your login credentials.</p>
+                </div>
+                <div>
+                    @if (Model.Is2faEnabled)
+                    {
+                        <span class="status-badge badge-active">&#10003; 2FA is Active</span>
+                    }
+                    else
+                    {
+                        <span class="status-badge badge-inactive">&#9888; 2FA is Inactive</span>
+                    }
+                </div>
+            </div>
+
+            <div class="tfa-card-body">
+
+                @if (!Model.Is2faEnabled)
+                {
+                    <p style="color: #4b5563; font-size: 15px; line-height: 1.7; margin-bottom: 20px;">
+                        Two-factor authentication significantly enhances your account security by requiring both your password and a unique 6-digit code generated by an authenticator app on your phone whenever you sign in.
+                    </p>
+
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <div class="feature-item-icon">&#128241;</div>
+                            <h3>Authenticator App</h3>
+                            <p>Works with Google Authenticator, Microsoft Authenticator, 1Password, and Authy.</p>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-item-icon">&#128274;</div>
+                            <h3>High Security</h3>
+                            <p>Protects your personal information and book collection from unauthorized access.</p>
+                        </div>
+                        <div class="feature-item">
+                            <div class="feature-item-icon">&#128273;</div>
+                            <h3>Recovery Codes</h3>
+                            <p>Receive 10 backup codes to ensure you never lose access even without your phone.</p>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 28px;">
+                        <a asp-action="EnableAuthenticator" class="btn-action-primary">
+                            <span>&#10024;</span>
+                            <span>Set Up Authenticator App</span>
+                        </a>
+                    </div>
+                }
+                else
+                {
+                    @if (Model.RecoveryCodesLeft <= 3)
+                    {
+                        <div class="alert-box alert-warning-custom">
+                            <span>&#9888;</span>
+                            <div>
+                                <strong>Warning:</strong> You have only <strong>@Model.RecoveryCodesLeft</strong> recovery codes left.
+                                Please generate new recovery codes before you run out.
+                            </div>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="alert-box alert-info-custom">
+                            <span>&#8505;</span>
+                            <div>
+                                You have <strong>@Model.RecoveryCodesLeft</strong> single-use recovery codes remaining.
+                            </div>
+                        </div>
+                    }
+
+                    <div class="actions-grid">
+                        <a asp-action="EnableAuthenticator" class="btn-action-secondary">
+                            <span>&#9881;</span>
+                            <span>Reconfigure Authenticator App</span>
+                        </a>
+
+                        <form asp-action="GenerateRecoveryCodes" method="post" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn-action-secondary">
+                                <span>&#128273;</span>
+                                <span>Generate New Recovery Codes</span>
+                            </button>
+                        </form>
+
+                        @if (Model.IsMachineRemembered)
+                        {
+                            <form asp-action="ForgetTwoFactorClient" method="post" style="display:inline;">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn-action-secondary">
+                                    <span>&#128421;</span>
+                                    <span>Forget This Browser</span>
+                                </button>
+                            </form>
+                        }
+
+                        <form asp-action="Disable2fa" method="post" onsubmit="return confirm('Are you sure you want to disable Two-Factor Authentication? Your account will only be protected by your password.');" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn-action-danger">
+                                <span>&#128683;</span>
+                                <span>Disable 2FA</span>
+                            </button>
+                        </form>
+
+                        <form asp-action="ResetAuthenticator" method="post" onsubmit="return confirm('Resetting will invalidate your current authenticator key. You will need to reconfigure your app. Continue?');" style="display:inline;">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn-action-danger">
+                                <span>&#128260;</span>
+                                <span>Reset Authenticator Key</span>
+                            </button>
+                        </form>
+                    </div>
+                }
+
+                <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid #edf0f7;">
+                    <a asp-controller="Users" asp-action="Dashboard" style="color: #6366f1; text-decoration: none; font-weight: 600; font-size: 14px;">
+                        &larr; Back to Dashboard
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>

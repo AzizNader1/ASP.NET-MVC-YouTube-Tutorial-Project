@@ -1,0 +1,267 @@
+@model IEnumerable<Book>
+
+@{
+    ViewData["Title"] = "Books Library";
+}
+
+<style>
+    .books-page {
+        padding: 2rem 0 3rem;
+    }
+
+    .library-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+        margin-bottom: 2rem;
+    }
+
+    .library-title {
+        font-size: 2rem;
+        font-weight: 700;
+        margin-bottom: .4rem;
+        color: #212529;
+    }
+
+    .library-subtitle {
+        color: #6c757d;
+        margin-bottom: 0;
+    }
+
+    .books-count {
+        display: inline-block;
+        padding: .35rem .75rem;
+        margin-top: .75rem;
+        background: #e9f2ff;
+        color: #0d6efd;
+        border-radius: 50rem;
+        font-size: .875rem;
+        font-weight: 600;
+    }
+
+    .book-card {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        border: 1px solid #e9ecef;
+        border-radius: 1rem;
+        overflow: hidden;
+        box-shadow: 0 3px 12px rgba(0, 0, 0, .04);
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .book-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 12px 28px rgba(0, 0, 0, .09);
+    }
+
+    .book-cover {
+        min-height: 165px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: linear-gradient(135deg, #e8f0ff, #f2eaff);
+        color: #495fc4;
+    }
+
+    .book-cover svg {
+        width: 65px;
+        height: 65px;
+    }
+
+    .book-content {
+        display: flex;
+        flex-direction: column;
+        flex: 1;
+        padding: 1.25rem;
+    }
+
+    .book-genre {
+        display: inline-block;
+        align-self: flex-start;
+        padding: .3rem .65rem;
+        margin-bottom: .85rem;
+        border-radius: 50rem;
+        background: #f1f3f5;
+        color: #495057;
+        font-size: .78rem;
+        font-weight: 600;
+    }
+
+    .book-title {
+        font-size: 1.2rem;
+        font-weight: 700;
+        line-height: 1.45;
+        overflow-wrap: anywhere;
+        margin-bottom: .5rem;
+        color: #212529;
+    }
+
+    .book-author {
+        color: #6c757d;
+        font-size: .95rem;
+        margin-bottom: 1.25rem;
+        overflow-wrap: anywhere;
+    }
+
+    .book-author strong {
+        color: #343a40;
+        font-weight: 600;
+    }
+
+    .book-actions {
+        display: flex;
+        flex-wrap: wrap;
+        gap: .5rem;
+        margin-top: auto;
+        padding-top: 1rem;
+        border-top: 1px solid #f1f3f5;
+    }
+
+    .book-actions .btn {
+        flex: 1;
+        font-size: .85rem;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 4rem 1.5rem;
+        background: #f8f9fa;
+        border: 1px dashed #ced4da;
+        border-radius: 1rem;
+    }
+
+    .empty-state h3 {
+        font-weight: 700;
+        margin-bottom: .75rem;
+    }
+
+    .empty-state p {
+        color: #6c757d;
+        margin-bottom: 1.5rem;
+    }
+
+    @@media (max-width: 576px) {
+        .books-page {
+            padding-top: 1.25rem;
+        }
+
+        .library-title {
+            font-size: 1.65rem;
+        }
+
+        .library-header .btn {
+            width: 100%;
+        }
+    }
+</style>
+
+<div class="container books-page">
+    @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert" style="border-radius: 12px; margin-bottom: 24px;">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+    <div class="library-header">
+        <div>
+            <h1 class="library-title">My Books Library</h1>
+            <p class="library-subtitle">
+                Explore and manage your book collection.
+            </p>
+
+            <span class="books-count">
+                @ViewData["BooksCount"] Books
+            </span>
+        </div>
+        @if(User.IsInRole("Admin"))
+        {
+            <a asp-action="Create" class="btn btn-primary btn-lg">
+                <span aria-hidden="true">+</span>
+                Add New Book
+            </a>
+        }
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="row g-4">
+
+            @foreach (var item in Model)
+            {
+                <div class="col-12 col-sm-6 col-lg-4 col-xl-3">
+
+                    <div class="book-card">
+
+                        <div class="book-cover">
+                            <img src="@(item.ImageUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase) ? item.ImageUrl : Url.Content("~/" + item.ImageUrl.TrimStart('~', '/')))"
+                                 alt="@item.BookName Cover"
+                                 class="img-fluid" />
+                        </div>
+
+                        <div class="book-content">
+
+                            <span class="book-genre">
+                               @item.Genre
+                            </span>
+
+                            <h2 class="book-title">
+                                @item.BookName
+                            </h2>
+
+                            <p class="book-author">
+                                By <strong>@item.Author</strong>
+                            </p>
+
+                            <div class="book-actions">
+
+                                <a asp-action="Details"
+                                   asp-route-id="@item.Id"
+                                   class="btn btn-outline-primary">
+                                    Details
+                                </a>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a asp-action="Edit"
+                                    asp-route-id="@item.Id"
+                                    class="btn btn-outline-secondary">
+                                        Edit
+                                    </a>
+
+                                    <a asp-action="Delete"
+                                    asp-route-id="@item.Id"
+                                    class="btn btn-outline-danger">
+                                        Delete
+                                    </a>
+                                }
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            }
+
+        </div>
+    }
+    else
+    {
+        <div class="empty-state">
+            <h3>Your library is empty</h3>
+
+            <p>
+                You haven't added any books yet.
+                Start building your collection today!
+            </p>
+
+            <a asp-action="Create" class="btn btn-primary">
+                Add Your First Book
+            </a>
+        </div>
+    }
+
+</div>

@@ -1,0 +1,226 @@
+@model FirstMVCProject.ViewModels.AccountViewModels.LoginWith2faViewModel
+
+@{
+    ViewData["Title"] = "Two-Factor Verification";
+}
+
+<style>
+    .auth-page {
+        padding: 2.5rem 0 3rem;
+    }
+
+    .auth-wrapper {
+        max-width: 500px;
+        margin: 0 auto;
+    }
+
+    .auth-header {
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .auth-icon {
+        width: 72px;
+        height: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.25rem;
+        border-radius: 1.25rem;
+        background: linear-gradient(135deg, #e8f0ff, #f2eaff);
+        color: #495fc4;
+        font-size: 32px;
+    }
+
+    .auth-title {
+        margin-bottom: .6rem;
+        color: #212529;
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .auth-subtitle {
+        max-width: 420px;
+        margin: 0 auto;
+        color: #6c757d;
+        font-size: 15px;
+        line-height: 1.6;
+    }
+
+    .auth-card {
+        overflow: hidden;
+        border: 1px solid #e9ecef;
+        border-radius: 1.25rem;
+        background: #fff;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, .06);
+    }
+
+    .auth-card-header {
+        padding: 2rem 2rem 1.25rem;
+        border-bottom: 1px solid #edf0f3;
+        background: linear-gradient(135deg, #f8faff, #fbfaff);
+    }
+
+        .auth-card-header h2 {
+            margin-bottom: .35rem;
+            color: #212529;
+            font-size: 1.25rem;
+            font-weight: 700;
+        }
+
+        .auth-card-header p {
+            margin-bottom: 0;
+            color: #6c757d;
+            font-size: .92rem;
+        }
+
+    .auth-card-body {
+        padding: 2rem;
+    }
+
+    .auth-field {
+        margin-bottom: 1.5rem;
+    }
+
+        .auth-field label {
+            display: block;
+            margin-bottom: .5rem;
+            color: #343a40;
+            font-size: .92rem;
+            font-weight: 600;
+        }
+
+    .code-input {
+        font-size: 24px;
+        letter-spacing: 6px;
+        text-align: center;
+        font-weight: 700;
+        padding: 12px;
+        border-radius: 12px;
+        border: 2px solid #dce2ee;
+        transition: border-color .2s, box-shadow .2s;
+    }
+
+    .code-input:focus {
+        border-color: #495fc4;
+        box-shadow: 0 0 0 4px rgba(73, 95, 196, .15);
+    }
+
+    .auth-submit {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+        width: 100%;
+        padding: .95rem 1.25rem;
+        border: 0;
+        border-radius: .85rem;
+        background: linear-gradient(135deg, #495fc4, #6643b5);
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity .2s, transform .2s;
+    }
+
+    .auth-submit:hover {
+        opacity: .95;
+        color: #fff;
+        transform: translateY(-1px);
+    }
+
+    .auth-card-footer {
+        padding: 1.25rem 2rem;
+        border-top: 1px solid #edf0f3;
+        background: #fbfcfe;
+        text-align: center;
+    }
+
+        .auth-card-footer p {
+            margin-bottom: 0;
+            color: #6c757d;
+            font-size: .92rem;
+        }
+
+        .auth-card-footer a {
+            color: #495fc4;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .auth-card-footer a:hover {
+            text-decoration: underline;
+        }
+</style>
+
+<div class="auth-page">
+    <div class="container auth-wrapper">
+
+        <div class="auth-header">
+            <div class="auth-icon">&#128272;</div>
+            <h1 class="auth-title">Two-Factor Verification</h1>
+            <p class="auth-subtitle">
+                Your account is protected with Two-Factor Authentication.
+                Please enter the 6-digit code from your authenticator app.
+            </p>
+        </div>
+
+        <section class="auth-card">
+            <div class="auth-card-header">
+                <h2>Enter Security Code</h2>
+                <p>Open Google Authenticator, Microsoft Authenticator, or your preferred app.</p>
+            </div>
+
+            <div class="auth-card-body">
+                <form asp-action="LoginWith2fa"
+                      asp-route-returnUrl="@Model.ReturnUrl"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <input asp-for="RememberMe" type="hidden" />
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger" style="margin-bottom: 1rem;" role="alert"></div>
+
+                    <div class="auth-field">
+                        <label asp-for="TwoFactorCode">6-Digit Authenticator Code</label>
+                        <input asp-for="TwoFactorCode"
+                               class="form-control code-input"
+                               autocomplete="one-time-code"
+                               maxlength="7"
+                               placeholder="123456"
+                               autofocus
+                               required />
+                        <span asp-validation-for="TwoFactorCode" class="text-danger" style="font-size: 13px;"></span>
+                    </div>
+
+                    <div class="form-check" style="margin-bottom: 1.5rem;">
+                        <input asp-for="RememberMachine" class="form-check-input" />
+                        <label asp-for="RememberMachine" class="form-check-label" style="font-size: 14px; color: #4b5563;">
+                            Don't ask for 2FA code again on this device
+                        </label>
+                    </div>
+
+                    <button type="submit" class="auth-submit">
+                        Verify & Sign In &rarr;
+                    </button>
+                </form>
+            </div>
+
+            <div class="auth-card-footer">
+                <p>
+                    Don't have access to your authenticator device?
+                    <br />
+                    <a asp-action="LoginWithRecoveryCode" asp-route-returnUrl="@Model.ReturnUrl">
+                        Sign in with a recovery code
+                    </a>
+                </p>
+            </div>
+        </section>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

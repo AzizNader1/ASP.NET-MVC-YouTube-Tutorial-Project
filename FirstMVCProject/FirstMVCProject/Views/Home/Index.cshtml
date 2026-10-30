@@ -1,0 +1,23 @@
+@{
+    ViewData["Title"] = "Home Page";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to learning mvc at @DateTime.UtcNow.ToLocalTime()</h1>
+    @{
+        List<int> numbers = new List<int> { 1, 2, 3, 4, 5 };
+
+    }
+    @if (numbers != null)
+    {
+        foreach (var number in numbers)
+        {
+            <p>@number</p>
+        }
+    }
+    else
+    {
+        <p>No numbers to display.</p>
+    }
+    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+</div>

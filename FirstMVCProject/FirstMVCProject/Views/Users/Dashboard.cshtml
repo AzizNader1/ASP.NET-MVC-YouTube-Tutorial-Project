@@ -1,0 +1,418 @@
+@{
+    ViewData["Title"] = "My Dashboard";
+    bool is2faEnabled = ViewBag.Is2faEnabled == true;
+}
+
+<style>
+    .dashboard-page {
+        min-height: 70vh;
+        padding: 45px 0 60px;
+        background: linear-gradient(135deg, #f6f8ff 0%, #f8f7fc 100%);
+    }
+
+    .dashboard-heading {
+        margin-bottom: 28px;
+    }
+
+        .dashboard-heading h1 {
+            color: #292f45;
+            font-size: 30px;
+            font-weight: 750;
+            margin-bottom: 8px;
+        }
+
+        .dashboard-heading p {
+            color: #7d8498;
+            font-size: 15px;
+            margin: 0;
+        }
+
+    .dashboard-layout {
+        display: grid;
+        grid-template-columns: 260px minmax(0, 1fr);
+        gap: 25px;
+        align-items: stretch;
+    }
+
+    .dashboard-sidebar,
+    .dashboard-main {
+        background: #fff;
+        border: 1px solid #edf0f7;
+        border-radius: 20px;
+        box-shadow: 0 10px 35px rgba(42, 55, 105, 0.06);
+    }
+
+    .dashboard-sidebar {
+        padding: 24px 18px;
+    }
+
+    .sidebar-brand {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 8px 8px 24px;
+        margin-bottom: 23px;
+        border-bottom: 1px solid #edf0f7;
+    }
+
+    .brand-icon {
+        width: 45px;
+        height: 45px;
+        flex-shrink: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 14px;
+        color: #fff;
+        font-size: 21px;
+        font-weight: 800;
+        background: linear-gradient(135deg, #4965cf, #7354bd);
+        box-shadow: 0 5px 14px rgba(91, 88, 198, .18);
+    }
+
+    .sidebar-brand h2 {
+        color: #30364b;
+        font-size: 16px;
+        font-weight: 750;
+        margin: 0 0 5px;
+    }
+
+    .sidebar-brand p {
+        color: #9299aa;
+        font-size: 12px;
+        margin: 0;
+    }
+
+    .sidebar-label {
+        color: #9aa1b2;
+        font-size: 11px;
+        font-weight: 750;
+        letter-spacing: 1.1px;
+        margin: 0 0 12px 12px;
+        text-transform: uppercase;
+    }
+
+    .sidebar-nav {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .sidebar-link {
+        display: flex;
+        align-items: center;
+        gap: 13px;
+        padding: 14px 15px;
+        border: 1px solid transparent;
+        border-radius: 12px;
+        color: #697187;
+        font-size: 14px;
+        font-weight: 650;
+        text-decoration: none;
+        transition: background .2s, color .2s, border-color .2s;
+    }
+
+        .sidebar-link:hover {
+            color: #5d58c8;
+            background: #f7f7ff;
+        }
+
+        .sidebar-link.active {
+            color: #5d58c8;
+            background: linear-gradient(135deg, #eef1ff, #f5efff);
+            border-color: #e5e4ff;
+        }
+
+    .sidebar-link-icon {
+        width: 23px;
+        height: 23px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+        font-size: 18px;
+    }
+
+    .sidebar-footer {
+        margin-top: 25px;
+        padding-top: 18px;
+        border-top: 1px solid #edf0f7;
+    }
+
+    .back-link {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+        border-radius: 11px;
+        color: #727b90;
+        font-size: 14px;
+        font-weight: 600;
+        text-decoration: none;
+    }
+
+        .back-link:hover {
+            color: #5d58c8;
+            background: #f8f7ff;
+        }
+
+    .dashboard-main {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 45px 35px;
+        min-height: 430px;
+    }
+
+    .welcome-icon {
+        width: 80px;
+        height: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+        border-radius: 24px;
+        background: linear-gradient(135deg, #eef1ff, #f4edff);
+        color: #635bc9;
+        font-size: 34px;
+    }
+
+    .dashboard-main h2 {
+        color: #292f45;
+        font-size: 26px;
+        font-weight: 750;
+        margin-bottom: 12px;
+    }
+
+    .dashboard-main p {
+        max-width: 500px;
+        color: #7d8498;
+        font-size: 15px;
+        line-height: 1.8;
+        margin: 0 0 24px;
+    }
+
+    .security-status-card {
+        width: 100%;
+        max-width: 520px;
+        padding: 20px 24px;
+        margin-bottom: 24px;
+        background: #fbfbfe;
+        border: 1px solid #ebeeff;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 16px;
+        text-align: left;
+    }
+
+    .status-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .badge-enabled {
+        background: #e6f4ea;
+        color: #137333;
+    }
+
+    .badge-disabled {
+        background: #fef7e0;
+        color: #b06000;
+    }
+
+    .btn-status-action {
+        padding: 8px 18px;
+        border-radius: 10px;
+        font-size: 13px;
+        font-weight: 650;
+        text-decoration: none;
+        transition: all .2s;
+    }
+
+    .btn-status-manage {
+        background: #4965cf;
+        color: #fff;
+    }
+
+    .btn-status-manage:hover {
+        background: #3b53b0;
+        color: #fff;
+    }
+
+    @@media (max-width: 850px) {
+        .dashboard-layout {
+            grid-template-columns: 1fr;
+        }
+
+        .dashboard-sidebar {
+            padding: 20px 16px;
+        }
+
+        .sidebar-nav {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+
+        .sidebar-footer {
+            margin-top: 15px;
+            padding-top: 12px;
+        }
+
+        .dashboard-main {
+            min-height: 360px;
+        }
+    }
+
+    @@media (max-width: 576px) {
+        .dashboard-page {
+            padding: 28px 0 40px;
+        }
+
+        .dashboard-heading h1 {
+            font-size: 25px;
+        }
+
+        .sidebar-nav {
+            grid-template-columns: 1fr;
+        }
+
+        .dashboard-main {
+            padding: 30px 16px;
+        }
+
+        .security-status-card {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+</style>
+
+<div class="dashboard-page">
+    <div class="container">
+
+        <div class="dashboard-heading">
+            <h1>My Dashboard</h1>
+            <p>Manage your account settings and security in one place.</p>
+        </div>
+
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert" style="border-radius: 12px; margin-bottom: 24px;">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <div class="dashboard-layout">
+
+            <!-- SIDEBAR -->
+            <aside class="dashboard-sidebar">
+
+                <div class="sidebar-brand">
+                    <div class="brand-icon">
+                        @if (!string.IsNullOrWhiteSpace(ViewBag.FullName as string))
+                        {
+                            @(((string)ViewBag.FullName)[0])
+                        }
+                        else
+                        {
+                            <text>A</text>
+                        }
+                    </div>
+
+                    <div>
+                        <h2>@(ViewBag.FullName ?? "My Account")</h2>
+                        <p>@(ViewBag.Email ?? "Account management")</p>
+                    </div>
+                </div>
+
+                <p class="sidebar-label">Account Settings</p>
+
+                <nav class="sidebar-nav" aria-label="Account settings">
+
+                    <a asp-controller="Users"
+                       asp-action="Edit"
+                       class="sidebar-link">
+                        <span class="sidebar-link-icon">&#9998;</span>
+                        <span>Update Profile</span>
+                    </a>
+
+                    <a asp-controller="Users"
+                       asp-action="UpdatePassword"
+                       class="sidebar-link">
+                        <span class="sidebar-link-icon">&#128274;</span>
+                        <span>Update Password</span>
+                    </a>
+
+                    <a asp-controller="Users"
+                       asp-action="TwoFactorAuthentication"
+                       class="sidebar-link">
+                        <span class="sidebar-link-icon">&#128272;</span>
+                        <span>Two-Factor Auth (2FA)</span>
+                    </a>
+
+                    <a asp-controller="Accounts"
+                       asp-action="Logout"
+                       class="sidebar-link">
+                        <span class="sidebar-link-icon">&#128682;</span>
+                        <span>Logout</span>
+                    </a>
+
+                </nav>
+
+                <div class="sidebar-footer">
+                    <a asp-controller="Books"
+                       asp-action="Index"
+                       class="back-link">
+                        <span>&#8592;</span>
+                        <span>Back to Books</span>
+                    </a>
+                </div>
+
+            </aside>
+
+            <!-- MAIN DASHBOARD CONTENT -->
+            <main class="dashboard-main">
+
+                <div class="welcome-icon">&#10024;</div>
+
+                <h2>Welcome to Your Dashboard</h2>
+
+                <p>
+                    Everything you need to manage your personal profile and account security is available here.
+                </p>
+
+                <div class="security-status-card">
+                    <div>
+                        <div style="font-weight: 700; color: #292f45; margin-bottom: 4px;">Two-Factor Authentication (2FA)</div>
+                        @if (is2faEnabled)
+                        {
+                            <span class="status-badge badge-enabled">&#10003; 2FA is Active</span>
+                        }
+                        else
+                        {
+                            <span class="status-badge badge-disabled">&#9888; 2FA is Not Enabled</span>
+                        }
+                    </div>
+
+                    <a asp-controller="Users"
+                       asp-action="TwoFactorAuthentication"
+                       class="btn-status-action btn-status-manage">
+                        @(is2faEnabled ? "Manage 2FA" : "Enable 2FA") &rarr;
+                    </a>
+                </div>
+
+            </main>
+
+        </div>
+    </div>
+</div>

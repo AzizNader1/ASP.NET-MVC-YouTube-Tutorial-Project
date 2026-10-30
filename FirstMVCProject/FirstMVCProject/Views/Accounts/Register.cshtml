@@ -1,0 +1,429 @@
+@model FirstMVCProject.ViewModels.AccountViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Create Account";
+}
+
+<style>
+    .auth-page {
+        padding: 2rem 0 3rem;
+    }
+
+    .auth-wrapper {
+        max-width: 620px;
+        margin: 0 auto;
+    }
+
+    .auth-header {
+        margin-bottom: 2rem;
+        text-align: center;
+    }
+
+    .auth-icon {
+        width: 72px;
+        height: 72px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 1.25rem;
+        border-radius: 1.25rem;
+        background: linear-gradient(135deg, #e8f0ff, #f2eaff);
+        color: #495fc4;
+    }
+
+        .auth-icon svg {
+            width: 36px;
+            height: 36px;
+        }
+
+    .auth-title {
+        margin-bottom: .6rem;
+        color: #212529;
+        font-size: 2rem;
+        font-weight: 700;
+    }
+
+    .auth-subtitle {
+        max-width: 440px;
+        margin: 0 auto;
+        color: #6c757d;
+        line-height: 1.6;
+    }
+
+    .auth-card {
+        overflow: hidden;
+        border: 1px solid #e9ecef;
+        border-radius: 1.25rem;
+        background: #fff;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, .06);
+    }
+
+    .auth-card-header {
+        padding: 2rem 2rem 1.25rem;
+        border-bottom: 1px solid #edf0f3;
+        background: linear-gradient(135deg, #f8faff, #fbfaff);
+    }
+
+        .auth-card-header h2 {
+            margin-bottom: .35rem;
+            color: #212529;
+            font-size: 1.35rem;
+            font-weight: 700;
+        }
+
+        .auth-card-header p {
+            margin-bottom: 0;
+            color: #6c757d;
+            font-size: .95rem;
+        }
+
+    .auth-card-body {
+        padding: 2rem;
+    }
+
+    .auth-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.25rem;
+    }
+
+    .auth-field {
+        margin-bottom: 0;
+    }
+
+    .auth-field-full {
+        grid-column: 1 / -1;
+    }
+
+    .auth-field label {
+        display: block;
+        margin-bottom: .5rem;
+        color: #343a40;
+        font-size: .92rem;
+        font-weight: 600;
+    }
+
+    .auth-required {
+        color: #dc3545;
+    }
+
+    .auth-card-body .form-control {
+        border-radius: .75rem;
+        padding: .85rem 1rem;
+        border: 1px solid #ced4da;
+    }
+
+    .auth-actions {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-top: 1.75rem;
+    }
+
+    .auth-submit {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .5rem;
+        flex: 1;
+        padding: .95rem 1.25rem;
+        border: 0;
+        border-radius: .85rem;
+        background: linear-gradient(135deg, #495fc4, #6643b5);
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity .2s, transform .2s;
+    }
+
+        .auth-submit:hover {
+            opacity: .95;
+            color: #fff;
+            transform: translateY(-1px);
+        }
+
+    .auth-cancel {
+        padding: .95rem 1.25rem;
+        border-radius: .85rem;
+        background: #f1f3f5;
+        color: #495057;
+        font-weight: 600;
+        text-decoration: none;
+        transition: background-color .2s;
+    }
+
+        .auth-cancel:hover {
+            background: #e9ecef;
+            color: #212529;
+        }
+
+    /* Google Button & Divider Styling */
+    .auth-divider {
+        display: flex;
+        align-items: center;
+        margin: 1.5rem 0;
+        text-align: center;
+    }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            border-bottom: 1px solid #e5e7eb;
+        }
+
+        .auth-divider span {
+            padding: 0 1rem;
+            color: #9ca3af;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+    .btn-google {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.75rem;
+        width: 100%;
+        padding: 0.85rem 1rem;
+        background: #ffffff;
+        color: #374151;
+        border: 1px solid #d1d5db;
+        border-radius: 0.85rem;
+        font-size: 0.95rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background-color .2s, border-color .2s, box-shadow .2s;
+    }
+
+        .btn-google:hover {
+            background: #f9fafb;
+            border-color: #9ca3af;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            color: #111827;
+        }
+
+    .google-icon {
+        width: 20px;
+        height: 20px;
+        flex-shrink: 0;
+    }
+
+    .auth-card-footer {
+        padding: 1.25rem 2rem;
+        border-top: 1px solid #edf0f3;
+        background: #fbfcfe;
+        text-align: center;
+    }
+
+        .auth-card-footer p {
+            margin-bottom: 0;
+            color: #6c757d;
+            font-size: .92rem;
+        }
+
+        .auth-card-footer a {
+            color: #495fc4;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+            .auth-card-footer a:hover {
+                text-decoration: underline;
+            }
+
+    .auth-note {
+        margin-top: 1.5rem;
+        text-align: center;
+        color: #adb5bd;
+        font-size: .88rem;
+    }
+
+    @@media (max-width: 576px) {
+        .auth-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<div class="auth-page">
+    <div class="container auth-wrapper">
+
+        <div class="auth-header">
+            <div class="auth-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                    <circle cx="8.5" cy="7.5" r="4" />
+                    <line x1="20" y1="8" x2="20" y2="14" />
+                    <line x1="23" y1="11" x2="17" y2="11" />
+                </svg>
+            </div>
+
+            <h1 class="auth-title">Join the Library</h1>
+            <p class="auth-subtitle">
+                Create your account to start managing your library and discovering new books.
+            </p>
+        </div>
+
+        <section class="auth-card">
+            <div class="auth-card-header">
+                <h2>Create Your Account</h2>
+                <p>Fill in your details or register with your Google account.</p>
+            </div>
+
+            <div class="auth-card-body">
+
+                @if (TempData["ErrorMessage"] != null)
+                {
+                    <div class="alert alert-danger" style="border-radius: 10px; font-size: 14px; margin-bottom: 1.25rem;">
+                        @TempData["ErrorMessage"]
+                    </div>
+                }
+
+                <form asp-controller="Accounts"
+                      asp-action="Register"
+                      asp-route-returnUrl="@ViewData["ReturnUrl"]"
+                      method="post">
+
+                    @Html.AntiForgeryToken()
+
+                    <div asp-validation-summary="ModelOnly" class="text-danger" style="margin-bottom: 1rem;" role="alert"></div>
+
+                    <div class="auth-grid">
+
+                        <div class="auth-field">
+                            <label asp-for="FirstName">
+                                First Name <span class="auth-required">*</span>
+                            </label>
+                            <input asp-for="FirstName"
+                                   class="form-control"
+                                   placeholder="Enter first name"
+                                   autofocus
+                                   required />
+                            <span asp-validation-for="FirstName" class="text-danger" style="font-size: 13px;"></span>
+                        </div>
+
+                        <div class="auth-field">
+                            <label asp-for="LastName">
+                                Last Name <span class="auth-required">*</span>
+                            </label>
+                            <input asp-for="LastName"
+                                   class="form-control"
+                                   placeholder="Enter last name"
+                                   required />
+                            <span asp-validation-for="LastName" class="text-danger" style="font-size: 13px;"></span>
+                        </div>
+
+                        <div class="auth-field auth-field-full">
+                            <label asp-for="Email">
+                                Email Address <span class="auth-required">*</span>
+                            </label>
+                            <input asp-for="Email"
+                                   type="email"
+                                   class="form-control"
+                                   autocomplete="email"
+                                   placeholder="name@example.com"
+                                   required />
+                            <span asp-validation-for="Email" class="text-danger" style="font-size: 13px;"></span>
+                        </div>
+
+                        <div class="auth-field auth-field-full">
+                            <label asp-for="Address">
+                                Address <span class="auth-required">*</span>
+                            </label>
+                            <input asp-for="Address"
+                                   class="form-control"
+                                   autocomplete="street-address"
+                                   placeholder="Enter your address"
+                                   required />
+                            <span asp-validation-for="Address" class="text-danger" style="font-size: 13px;"></span>
+                        </div>
+
+                        <div class="auth-field">
+                            <label asp-for="Password">
+                                Password <span class="auth-required">*</span>
+                            </label>
+                            <input asp-for="Password"
+                                   type="password"
+                                   class="form-control"
+                                   autocomplete="new-password"
+                                   placeholder="Create password"
+                                   required />
+                            <span asp-validation-for="Password" class="text-danger" style="font-size: 13px;"></span>
+                        </div>
+
+                        <div class="auth-field">
+                            <label asp-for="ConfirmPassword">
+                                Confirm Password <span class="auth-required">*</span>
+                            </label>
+                            <input asp-for="ConfirmPassword"
+                                   type="password"
+                                   class="form-control"
+                                   autocomplete="new-password"
+                                   placeholder="Repeat password"
+                                   required />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger" style="font-size: 13px;"></span>
+                        </div>
+
+                    </div>
+
+                    <div class="auth-actions">
+                        <button type="submit" class="auth-submit">
+                            Create Account &rarr;
+                        </button>
+
+                        <a asp-controller="Books"
+                           asp-action="Index"
+                           class="auth-cancel">
+                            Cancel
+                        </a>
+                    </div>
+                </form>
+
+                <!-- OR DIVIDER -->
+                <div class="auth-divider">
+                    <span>or</span>
+                </div>
+
+                <!-- GOOGLE SIGN UP BUTTON -->
+                <form asp-controller="Accounts"
+                      asp-action="ExternalLogin"
+                      asp-route-returnUrl="@ViewData["ReturnUrl"]"
+                      method="post">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" name="provider" value="Google" class="btn-google">
+                        <svg class="google-icon" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" />
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" />
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z" />
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z" />
+                        </svg>
+                        <span>Sign up with Google</span>
+                    </button>
+                </form>
+
+            </div>
+
+            <div class="auth-card-footer">
+                <p>
+                    Already have an account?
+                    <a asp-controller="Accounts" asp-action="Login" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+                        Sign in
+                    </a>
+                </p>
+            </div>
+        </section>
+
+        <p class="auth-note">
+            Your reading journey begins with a single page.
+        </p>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

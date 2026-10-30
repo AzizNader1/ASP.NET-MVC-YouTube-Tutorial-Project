@@ -1,0 +1,196 @@
+@model FirstMVCProject.ViewModels.UserViewModels.ShowRecoveryCodesViewModel
+
+@{
+    ViewData["Title"] = "Emergency Recovery Codes";
+}
+
+<style>
+    .recovery-page {
+        min-height: calc(100vh - 80px);
+        padding: 40px 16px;
+        background: #f5f7fc;
+    }
+
+    .recovery-container {
+        max-width: 680px;
+        margin: 0 auto;
+    }
+
+    .recovery-header {
+        margin-bottom: 28px;
+    }
+
+        .recovery-header h1 {
+            margin-bottom: 8px;
+            color: #202943;
+            font-size: 30px;
+            font-weight: 800;
+        }
+
+        .recovery-header p {
+            margin: 0;
+            color: #7b849b;
+            font-size: 15px;
+        }
+
+    .recovery-card {
+        overflow: hidden;
+        background: #fff;
+        border: 1px solid #edf0f7;
+        border-radius: 20px;
+        box-shadow: 0 12px 35px rgba(31, 41, 75, 0.07);
+    }
+
+    .recovery-card-header {
+        padding: 24px 30px;
+        background: linear-gradient(135deg, #fef2f2, #fff1f2);
+        border-bottom: 1px solid #fee2e2;
+    }
+
+        .recovery-card-header h2 {
+            margin: 0 0 6px;
+            color: #991b1b;
+            font-size: 20px;
+            font-weight: 750;
+        }
+
+        .recovery-card-header p {
+            margin: 0;
+            color: #b91c1c;
+            font-size: 14px;
+        }
+
+    .recovery-card-body {
+        padding: 30px;
+    }
+
+    .codes-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        padding: 20px;
+        background: #f8fafc;
+        border: 1px solid #e2e8f0;
+        border-radius: 14px;
+        margin: 20px 0;
+    }
+
+    .code-badge {
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        color: #1e293b;
+        padding: 8px 12px;
+        background: #fff;
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        text-align: center;
+    }
+
+    .recovery-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-top: 24px;
+        padding-top: 20px;
+        border-top: 1px solid #edf0f7;
+    }
+
+    .btn-done {
+        padding: 12px 28px;
+        border-radius: 12px;
+        color: #fff;
+        background: linear-gradient(135deg, #4965cf, #7354bd);
+        font-size: 15px;
+        font-weight: 650;
+        text-decoration: none;
+        box-shadow: 0 4px 14px rgba(99, 102, 241, 0.25);
+    }
+
+    .btn-done:hover {
+        color: #fff;
+        opacity: 0.95;
+    }
+
+    .btn-copy-all {
+        padding: 12px 20px;
+        border-radius: 12px;
+        background: #f1f5f9;
+        color: #334155;
+        border: 1px solid #cbd5e1;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all .2s;
+    }
+
+    .btn-copy-all:hover {
+        background: #e2e8f0;
+    }
+</style>
+
+<div class="recovery-page">
+    <div class="recovery-container">
+
+        <div class="recovery-header">
+            <h1>Save Your Recovery Codes</h1>
+            <p>2FA has been successfully activated on your account.</p>
+        </div>
+
+        <div class="recovery-card">
+
+            <div class="recovery-card-header">
+                <h2>Important: Save These Codes Now</h2>
+                <p>If you lose access to your authenticator device, these codes are the ONLY way to regain access to your account.</p>
+            </div>
+
+            <div class="recovery-card-body">
+
+                <p style="color: #475569; font-size: 14px; line-height: 1.6;">
+                    Each code can only be used <strong>once</strong>. Store them in a secure password manager or safe physical location.
+                </p>
+
+                <div class="codes-grid" id="codesGrid">
+                    @foreach (var code in Model.RecoveryCodes)
+                    {
+                        <div class="code-badge">@code</div>
+                    }
+                </div>
+
+                <div class="recovery-actions">
+                    <button type="button" class="btn-copy-all" onclick="copyAllCodes()">
+                        <span id="copyAllText">&#128203; Copy All Codes</span>
+                    </button>
+
+                    <a asp-controller="Users" asp-action="Dashboard" class="btn-done">
+                        Done, Take Me to Dashboard &rarr;
+                    </a>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function copyAllCodes() {
+            var codes = [];
+            document.querySelectorAll("#codesGrid .code-badge").forEach(function (el) {
+                codes.push(el.innerText.trim());
+            });
+
+            var text = codes.join("\n");
+            navigator.clipboard.writeText(text).then(function () {
+                var btnText = document.getElementById("copyAllText");
+                btnText.innerHTML = "&#10003; All Codes Copied!";
+                setTimeout(function () {
+                    btnText.innerHTML = "&#128203; Copy All Codes";
+                }, 2500);
+            });
+        }
+    </script>
+}

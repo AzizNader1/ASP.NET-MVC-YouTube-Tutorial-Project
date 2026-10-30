@@ -1,0 +1,108 @@
+@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<style>
+    .denied-page {
+        padding: 3rem 0;
+        min-height: 65vh;
+        display: flex;
+        align-items: center;
+    }
+
+    .denied-card {
+        max-width: 540px;
+        margin: 0 auto;
+        padding: 2.5rem;
+        background: #fff;
+        border: 1px solid #e9ecef;
+        border-radius: 1rem;
+        box-shadow: 0 8px 30px rgba(0, 0, 0, .06);
+        text-align: center;
+    }
+
+    .denied-icon {
+        width: 80px;
+        height: 80px;
+        margin: 0 auto 1.5rem;
+        border-radius: 50%;
+        background: #fee2e2;
+        color: #dc2626;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 36px;
+    }
+
+    .denied-title {
+        font-size: 1.75rem;
+        font-weight: 700;
+        color: #1f2937;
+        margin-bottom: 0.75rem;
+    }
+
+    .denied-message {
+        color: #6b7280;
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+    }
+
+    .denied-actions {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        flex-wrap: wrap;
+    }
+
+    .btn-denied-primary {
+        background: #2563eb;
+        color: #fff;
+        padding: 0.65rem 1.5rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background .2s ease;
+    }
+
+    .btn-denied-primary:hover {
+        background: #1d4ed8;
+        color: #fff;
+    }
+
+    .btn-denied-secondary {
+        background: #f3f4f6;
+        color: #374151;
+        padding: 0.65rem 1.5rem;
+        border-radius: 0.5rem;
+        text-decoration: none;
+        font-weight: 600;
+        transition: background .2s ease;
+    }
+
+    .btn-denied-secondary:hover {
+        background: #e5e7eb;
+        color: #111827;
+    }
+</style>
+
+<div class="denied-page">
+    <div class="container">
+        <div class="denied-card">
+            <div class="denied-icon">&#128683;</div>
+            <h1 class="denied-title">Access Denied</h1>
+            <p class="denied-message">
+                You do not have permission to view or access this page.
+                This section requires administrator privileges.
+            </p>
+            <div class="denied-actions">
+                <a asp-controller="Books" asp-action="Index" class="btn-denied-primary">
+                    Return to Library
+                </a>
+                <a asp-controller="Accounts" asp-action="Login" class="btn-denied-secondary">
+                    Sign In with Another Account
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
