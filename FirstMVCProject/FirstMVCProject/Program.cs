@@ -2,6 +2,7 @@ using FirstMVCProject.Data;
 using FirstMVCProject.Models;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace FirstMVCProject
@@ -13,9 +14,14 @@ namespace FirstMVCProject
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews(options =>
+            {
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
+
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
             builder.Services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
             {
                 options.Password.RequiredLength = 8;
@@ -47,6 +53,10 @@ namespace FirstMVCProject
                 options.AccessDeniedPath = "/Accounts/AccessDenied";
                 options.ExpireTimeSpan = TimeSpan.FromDays(7);
                 options.SlidingExpiration = true;
+                // Add defense against cross-site request forgery (CSRF) attacks
+                options.Cookie.HttpOnly = true;
+                options.Cookie.SecurePolicy = Microsoft.AspNetCore.Http.CookieSecurePolicy.Always;
+                options.Cookie.SameSite = SameSiteMode.Lax;
             });
 
             var app = builder.Build();
@@ -61,7 +71,13 @@ namespace FirstMVCProject
 
             app.UseHttpsRedirection();
             app.UseRouting();
-
+            app.Use(async (context, next) =>
+            {
+                context.Response.Headers.Append(
+                    "Content-Security-Policy",
+                    "default-src 'self'; script-src 'self' https://cdnjs.cloudflare.com; object-src 'none';");
+                await next();
+            });
             app.UseAuthentication();
             app.UseAuthorization();
 
