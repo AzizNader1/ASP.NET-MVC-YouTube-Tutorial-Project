@@ -1,5 +1,7 @@
 using FirstMVCProject.Data;
 using FirstMVCProject.Models;
+using FirstMVCProject.Services.Implementation;
+using FirstMVCProject.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +19,32 @@ namespace FirstMVCProject
             builder.Services.AddControllersWithViews(options =>
             {
                 options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+            });
+
+
+            // ---------------------------------------------------------
+            // Register External Web API Typed HttpClient
+            // ---------------------------------------------------------
+            var apiBaseUrl = builder.Configuration["ExternalApis:BookStoreApi:BaseUrl"]
+                ?? throw new InvalidOperationException("External API BaseUrl is not configured.");
+            var timeoutSeconds = builder.Configuration.GetValue<int>("ExternalApis:BookStoreApi:TimeoutSeconds", 15);
+            builder.Services.AddHttpClient<IBookApiClient, BookApiClient>(client =>
+            {
+                client.BaseAddress = new Uri(apiBaseUrl);
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+                client.DefaultRequestHeaders.Add("User-Agent", "FirstMVCProject-WebClient/1.0");
+                client.Timeout = TimeSpan.FromSeconds(timeoutSeconds);
+            })
+            .ConfigurePrimaryHttpMessageHandler(() =>
+            {
+                // For local development only: bypass SSL validation if self-signed certs fail
+                var handler = new HttpClientHandler();
+                if (builder.Environment.IsDevelopment())
+                {
+                    handler.ServerCertificateCustomValidationCallback =
+                        HttpClientHandler.DangerousAcceptAnyServerCertificateValidator;
+                }
+                return handler;
             });
 
             builder.Services.AddDbContext<ApplicationDbContext>(options =>

@@ -1,3 +1,4 @@
 <Solution>
+  <Project Path="BookStoreAPI/BookStoreAPI.csproj" Id="bffb31af-872c-4667-b1af-e4490022ba87" />
   <Project Path="FirstMVCProject/FirstMVCProject.csproj" />
 </Solution>

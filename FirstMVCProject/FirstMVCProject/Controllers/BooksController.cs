@@ -1,5 +1,6 @@
 using FirstMVCProject.Data;
 using FirstMVCProject.Models;
+using FirstMVCProject.Services.Interfaces;
 using FirstMVCProject.ViewModels.BookViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,21 +11,24 @@ namespace FirstMVCProject.Controllers
     public class BooksController : Controller
     {
         private readonly ApplicationDbContext _context;
+        private readonly IBookApiClient _bookApiClient;
         private readonly IWebHostEnvironment _webHostEnvironment;
         private static readonly string[] PermittedExtensions = [".jpg", ".jpeg", ".png"];
         private const long FileSizeLimit = 5 * 1024 * 1024; // 5 MB
 
-        public BooksController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment)
+        public BooksController(ApplicationDbContext context, IWebHostEnvironment webHostEnvironment, IBookApiClient bookApiClient)
         {
             _context = context;
             _webHostEnvironment = webHostEnvironment;
+            _bookApiClient = bookApiClient;
         }
 
         // GET: Books
         public async Task<IActionResult> Index()
         {
-            ViewData["BooksCount"] = await _context.Books.CountAsync();
-            return View(await _context.Books.ToListAsync());
+            var books = await _bookApiClient.GetAllBooksAsync();
+            ViewData["BooksCount"] = books.Count();
+            return View(books);
         }
 
         // GET: Books/Details/5
@@ -35,8 +39,7 @@ namespace FirstMVCProject.Controllers
                 return NotFound();
             }
 
-            var book = await _context.Books
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var book = await _bookApiClient.GetBookByIdAsync(id.Value);
 
             if (book == null)
             {

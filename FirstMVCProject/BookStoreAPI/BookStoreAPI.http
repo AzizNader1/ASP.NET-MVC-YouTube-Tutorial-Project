@@ -1,0 +1,43 @@
+@BookStoreAPI_HostAddress = https://localhost:7048
+
+### 1. Get all books
+GET {{BookStoreAPI_HostAddress}}/api/books
+Accept: application/json
+
+### 2. Filter books by search term
+GET {{BookStoreAPI_HostAddress}}/api/books?search=Gatsby
+Accept: application/json
+
+### 3. Filter books by Genre (e.g. 0 = Fiction, 4 = ScienceFiction)
+GET {{BookStoreAPI_HostAddress}}/api/books?genre=Fiction
+Accept: application/json
+
+### 4. Get book by ID
+GET {{BookStoreAPI_HostAddress}}/api/books/1
+Accept: application/json
+
+### 5. Create a new book (text only, stores text URL/path)
+POST {{BookStoreAPI_HostAddress}}/api/books
+Content-Type: application/json
+
+{
+  "bookName": "Clean Architecture in .NET",
+  "author": "Robert C. Martin",
+  "genre": 1,
+  "imageUrl": "https://example.com/clean-arch.jpg"
+}
+
+### 6. Update an existing book
+PUT {{BookStoreAPI_HostAddress}}/api/books/1
+Content-Type: application/json
+
+{
+  "bookName": "The Great Gatsby - Special Edition",
+  "author": "F. Scott Fitzgerald",
+  "genre": 0,
+  "imageUrl": ""
+}
+
+### 7. Delete a book by ID
+DELETE {{BookStoreAPI_HostAddress}}/api/books/5
+Accept: application/json
